@@ -1,0 +1,21 @@
+# binários compilados
+felzenszwalb
+cousty
+ift
+*.o
+
+# resultados gerados (não versionar imagens de saída)
+results/felzenszwalb/*
+results/cousty/*
+results/ift/*
+
+# LaTeX auxiliares
+report/*.aux
+report/*.log
+report/*.out
+report/*.synctex.gz
+report/*.toc
+report/*.pdf
+
+# sistema
+.DS_Store
