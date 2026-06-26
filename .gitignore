@@ -1,7 +1,5 @@
 # binários compilados
-felzenszwalb
-cousty
-ift
+
 *.o
 
 # resultados gerados (não versionar imagens de saída)
