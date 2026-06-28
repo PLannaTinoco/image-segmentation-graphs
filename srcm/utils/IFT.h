@@ -10,7 +10,7 @@
 // Seus headers existentes
 #include "Filters.h"            // Obrigatório: Deve conter RGBtoLab
 #include "PixelConfiguration.h" // Obrigatório: Structs Node, Seeds, CIELAB
-#include "graph/DirectedGraph.h"      // Sua classe de Grafo
+#include "../graph/DirectedGraph.h"      // Sua classe de Grafo
 
 
 struct IFTNode {

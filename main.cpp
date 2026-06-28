@@ -1,5 +1,3 @@
-#ifndef HIERARCHICAL_MST_SEGMENTER_H
-#define HIERARCHICAL_MST_SEGMENTER_H
 
 #include <vector>
 #include <cmath>
@@ -137,4 +135,3 @@ public:
     }
 };
 
-#endif

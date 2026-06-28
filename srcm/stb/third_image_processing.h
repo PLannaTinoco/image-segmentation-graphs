@@ -8,10 +8,8 @@
 #include <algorithm>
 #include <limits>
 
-#include "graph/DirectedGraph.h"
-#include "stb/stb_image.h"
-#include "stb/stb_image_write.h"
-#include "utils/Filters.h"
+#include "../graph/DirectedGraph.h"
+#include "../utils/Filters.h"
 #include "utils/PixelConfiguration.h" // Garante acesso à estrutura Seeds e CIELAB
 
 // Estrutura auxiliar para a Fila de Prioridade do IFT
@@ -42,8 +40,9 @@ unsigned char* create_graph(const char * imagePath, DirectedGraph &graph) {
         return nullptr;
     }
 
-    // Suavização Gaussiana dupla para redução de ruídos espúrios
+    // Suavização Gaussiana tripla para redução de ruídos espúrios e melhor definição de borda
     imageData = toGaussian_blur(imageData, width, height, 3); 
+    imageData = toGaussian_blur(imageData, width, height, 3);
     imageData = toGaussian_blur(imageData, width, height, 3);
     
     // Extração de magnitudes de borda via Filtro de Sobel
@@ -52,7 +51,7 @@ unsigned char* create_graph(const char * imagePath, DirectedGraph &graph) {
     const long totalSize = height * width;
     graph.inicializar(totalSize, width, height);
 
-    const double W = 500.0; // Peso modulador da penalidade do Sobel
+    const double W = 1500.0; // Peso modulador da penalidade do Sobel
     
     // Conectividade-4 (Vizinhos imediatos: Direita, Esquerda, Baixo, Cima)
     const int dx[] = {1, -1, 0, 0};
@@ -109,7 +108,7 @@ unsigned char* create_graph(const char * imagePath, DirectedGraph &graph) {
  * @param labels Vetor de saída que armazenará os rótulos finais (1 para objeto, 0 para fundo).
  */
 void runIFT(const DirectedGraph& graph, const Seeds& seeds, std::vector<int>& labels) {
-    int numVertices = graph.get_num_vertices(); // Alinhar com o método correspondente da sua classe
+    int numVertices = graph.getSize(); // Alinhar com o método correspondente da sua classe
     
     // Inicializa vetores de controle do Dijkstra
     std::vector<double> cost(numVertices, std::numeric_limits<double>::infinity());
@@ -147,10 +146,10 @@ void runIFT(const DirectedGraph& graph, const Seeds& seeds, std::vector<int>& la
         if (current.cost > cost[u]) continue;
 
         // Explora as adjacências do vértice atual
-        // Nota: Ajuste a iteração de arestas ('graph.get_edges(u)') conforme a assinatura real do seu DirectedGraph
-        for (const auto& edge : graph.get_edges(u)) {
-            int v = edge.v; // Vértice destino
-            double weight = edge.weight; // Peso do arco (cor + Sobel)
+        // Nota: Ajuste a iteração de arestas ('graph.getNeighbors(u)') conforme a assinatura real do seu DirectedGraph
+        for (const auto& edge : graph.getNeighbors(u)) {
+            int v = edge.first; // Vértice destino
+            double weight = edge.second; // Peso do arco
 
             // Função de custo aditiva padrão do IFT
             double offeringCost = cost[u] + weight;

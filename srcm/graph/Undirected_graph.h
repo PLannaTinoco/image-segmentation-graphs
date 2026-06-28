@@ -2,9 +2,9 @@
 #define UNDIRECTED_GRAPH_H
 
 #include "Graph.h"
-#include "utils/PixelConfiguration.h"
-#include "utils/FH.h"
-#include "utils/UnionFind.h"
+#include "../utils/PixelConfiguration.h"
+#include "../utils/FH.h"
+#include "../utils/UnionFind.h"
 #include <algorithm>
 #include <vector>
 #include <iostream>
@@ -45,29 +45,29 @@ class Undirected_graph : public Graph {
             }
         }
 
-        std::vector<ARESTA> sort_edges() {
-            std::vector<ARESTA> all_edges;
+        std::vector<Edge> sort_edges() {
+            std::vector<Edge> all_edges;
             for (int u = 0; u < this->size; ++u) {
                 for (const auto& edge_pair : this->adj[u]) {
                     int v = edge_pair.first;
                     double weight = edge_pair.second;
                     if (u < v) {
-                        all_edges.push_back({u, v, weight});
+                        all_edges.push_back({u, v, weight, (int)all_edges.size()});
                     }
                 }
             }
-            std::sort(all_edges.begin(), all_edges.end(), [](const ARESTA& a, const ARESTA& b) {
+            std::sort(all_edges.begin(), all_edges.end(), [](const Edge& a, const Edge& b) {
                 return a.weight < b.weight;
             });
             return all_edges;
         }
 
-        std::vector<ARESTA> Kruskal() {
-            std::vector<ARESTA> sortedEdges = sort_edges();
-            std::vector<ARESTA> mst;
+        std::vector<Edge> Kruskal() {
+            std::vector<Edge> sortedEdges = sort_edges();
+            std::vector<Edge> mst;
             UnionFind unionFind(this->size);
             
-            for(const ARESTA& aresta : sortedEdges) {
+            for(const Edge& aresta : sortedEdges) {
                 if(mst.size() == this->size - 1) {
                     return mst;
                 }
@@ -80,9 +80,9 @@ class Undirected_graph : public Graph {
         }
 
         // --- MÉTODO 1: Felzenszwalb & Huttenlocher ---
-        FH MST_Forest(int k, const std::vector<ARESTA>& sortedEdges) {
+        FH MST_Forest(int k, const std::vector<Edge>& sortedEdges) {
             FH segmentador(k, this->size);
-            for(const auto& aresta: sortedEdges) {
+            for(const Edge& aresta: sortedEdges) {
                 segmentador.FelzenszwalbNHuttenlocher(aresta);
             }
             return segmentador;
@@ -97,14 +97,14 @@ class Undirected_graph : public Graph {
          */
         std::vector<int> CoustyQuasiFlatZones(double lambdaThreshold) {
             // 1. Obtém a Árvore Geradora Mínima (MST) da imagem via Kruskal
-            std::vector<ARESTA> mst = this->Kruskal();
+            std::vector<Edge> mst = this->Kruskal();
             
             // 2. Instancia uma nova estrutura Union-Find para mapear as regiões finais
             UnionFind uf_qfz(this->size);
 
             // 3. Aplica o corte hierárquico: Une componentes adjacentes na MST 
             // apenas se a dissimilaridade (peso) for menor ou igual a lambda
-            for (const ARESTA& aresta : mst) {
+            for (const Edge& aresta : mst) {
                 if (aresta.weight <= lambdaThreshold) {
                     uf_qfz.union_sets(aresta.u, aresta.v);
                 }
@@ -119,9 +119,9 @@ class Undirected_graph : public Graph {
             return labels;
         }
 
-        UnionFind findComponents(std::vector<ARESTA> &mst) {
+        UnionFind findComponents(std::vector<Edge> &mst) {
             UnionFind uf(this->size);
-            for(const ARESTA& aresta: mst) {
+            for(const Edge& aresta: mst) {
                 uf.union_sets(aresta.u, aresta.v);
             }
             return uf;
@@ -134,4 +134,4 @@ class Undirected_graph : public Graph {
         int getHeight() { return this->height; }
 };
 
-#endifv
+#endif

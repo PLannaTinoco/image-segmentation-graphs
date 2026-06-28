@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 #include "Graph.h"
-#include "utils/PixelConfiguration.h"
+#include "../utils/PixelConfiguration.h"
 
 class DirectedGraph : public Graph {
     private:
@@ -49,7 +49,7 @@ class DirectedGraph : public Graph {
 
         void setWidth(int w) { this->width = w; }
         void setHeight(int h) { this->height = h; } 
-        int getSize() { return this->size; }
+        int getSize() const { return this->size; }
         int getWidth() { return this->width; }
         int getHeight() { return this->height; }
 };

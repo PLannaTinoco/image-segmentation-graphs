@@ -7,14 +7,7 @@
 #include <vector>
 #include <limits>
 
-// Inclusões obrigatórias para manipulação e leitura de imagens (STB)
-#ifndef STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-#endif
-
-#ifndef STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
-#endif
+// Inclusões STB são feitas via test_main.cpp (uma única vez)
 
 /** * @brief Faz a conversão do padrão RGB para o padrão CIELAB (melhor percepção das cores)
  **/

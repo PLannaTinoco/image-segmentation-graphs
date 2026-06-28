@@ -1,13 +1,11 @@
 #ifndef IMAGE_PROCESSING_H
 #define IMAGE_PROCESSING_H 
 
-#include "stb/stb_image.h"
-#include "stb/stb_image_write.h"
-#include "graph/Undirected_graph.h"
-#include "utils/UnionFind.h"
-#include "utils/PixelConfiguration.h"
-#include "utils/FH.h"
-#include "utils/Filters.h"
+#include "../graph/Undirected_graph.h"
+#include "../utils/UnionFind.h"
+#include "../utils/PixelConfiguration.h"
+#include "../utils/FH.h"
+#include "../utils/Filters.h"
 
 #include <iostream>
 #include <vector>
@@ -302,7 +300,7 @@ int processImage(const char* path, const char* output_path, const int K, const i
 
     if (original_imageData == nullptr) return 1;
 
-    std::vector<ARESTA> sortedEdges = g.sort_edges();
+    std::vector<Edge> sortedEdges = g.sort_edges();
     std::cout << "Executando o algoritmo de Kruskal (Felzenszwalb)..." << std::endl;
     FH segmentador = g.MST_Forest(K, sortedEdges);
     segmentador.mergeSmallSegments(sortedEdges, MIN_SEGMENT_SIZE);
