@@ -23,5 +23,11 @@ echo "=== IFT / Watershed ==="
 ./segmentar ift $IMAGEM
 echo ""
 
+echo "=== Gerando Benchmark ==="
+./segmentar benchmark $IMAGEM
+echo ""
+
+
+
 echo "=== Arquivos gerados ==="
 find output -type f | sort
